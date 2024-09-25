@@ -12,37 +12,105 @@ document.getElementById('señoraForm').addEventListener('submit', function(e) {
         return;
     }
 
-    let row = document.createElement('tr');
-    row.innerHTML = `
-        <td>${nombre}</td>
-        <td>${celular}</td>
-        <td>${documento}</td>
-        <td>${puesto}</td>
-        <td class="text-center">
-            <button class="btn btn-sm btn-warning" onclick="editSeñora(this)">Editar</button> 
-            <button class="btn btn-sm btn-danger" onclick="deleteSeñora(this)">Eliminar</button>
-        </td>
-    `;
-    document.getElementById('señorasList').appendChild(row);
-    document.getElementById('señoraForm').reset();
+    let señora = {
+        nombre: nombre,
+        cedula: documento,
+        celular: celular,
+        id_puesto: puesto
+    };
+
+    fetch('http://localhost:8080/api/senyora', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(señora)
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert("Señora añadida correctamente");
+        loadSeñoras(); // Para recargar la lista de señoras
+        document.getElementById('señoraForm').reset();
+    })
+    .catch(error => console.error('Error:', error));
 });
 
-function editSeñora(button) {
-    let row = button.closest('tr');
-    document.getElementById('señoraNombre').value = row.cells[0].textContent;
-    document.getElementById('señoraCelular').value = row.cells[1].textContent;
-    document.getElementById('señoraDocumento').value = row.cells[2].textContent;
-    document.getElementById('señoraPuesto').value = row.cells[3].textContent;
-    row.remove();
+function loadSeñoras() {
+    fetch('http://localhost:8080/api/senyora')
+    .then(response => response.json())
+    .then(data => {
+        let señoraList = document.getElementById('señorasList');
+        señoraList.innerHTML = ''; // Limpiar la lista
+
+        data.forEach(señora => {
+            let row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${señora.nombre}</td>
+                <td>${señora.celular}</td>
+                <td>${señora.cedula}</td>
+                <td>${señora.id_puesto}</td>
+                <td class="text-center">
+                    <button class="btn btn-sm btn-warning" onclick="editSeñora(${señora.id_senyora})">Editar</button> 
+                    <button class="btn btn-sm btn-danger" onclick="deleteSeñora(${señora.id_senyora})">Eliminar</button>
+                </td>
+            `;
+            señoraList.appendChild(row);
+        });
+    })
+    .catch(error => console.error('Error:', error));
 }
 
-function deleteSeñora(button) {
+function editSeñora(id_senyora) {
+    fetch(`http://localhost:8080/api/senyora/${id_senyora}`)
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('señoraNombre').value = data.nombre;
+        document.getElementById('señoraCelular').value = data.celular;
+        document.getElementById('señoraDocumento').value = data.cedula;
+        document.getElementById('señoraPuesto').value = data.id_puesto;
+
+        deleteSeñora(id_senyora); // Eliminar primero para después agregar el nuevo
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function deleteSeñora(id_senyora) {
     if (confirm("¿Estás seguro de que deseas eliminar esta señora?")) {
-        button.closest('tr').remove();
+        fetch(`http://localhost:8080/api/senyora/${id_senyora}`, {
+            method: 'DELETE'
+        })
+        .then(() => {
+            alert("Señora eliminada correctamente");
+            loadSeñoras();
+        })
+        .catch(error => console.error('Error:', error));
     }
 }
 
 // Gestión de Productos
+
+function loadProductos() {
+    fetch('http://localhost:8080/api/producto')
+    .then(response => response.json())
+    .then(data => {
+        let productoList = document.getElementById('productosList');
+        productoList.innerHTML = ''; // Limpiar la lista
+
+        data.forEach(producto => {
+            let row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${producto.nombre_producto}</td>
+                <td>$${producto.precio}</td>
+                <td>${producto.id_puesto}</td>
+                <td class="text-center">
+                    <button class="btn btn-sm btn-warning" onclick="editProducto(${producto.id_producto})">Editar</button> 
+                    <button class="btn btn-sm btn-danger" onclick="deleteProducto(${producto.id_producto})">Eliminar</button>
+                </td>
+            `;
+            productoList.appendChild(row);
+        });
+    })
+    .catch(error => console.error('Error:', error));
+}
+
 document.getElementById('productoForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -55,33 +123,52 @@ document.getElementById('productoForm').addEventListener('submit', function(e) {
         return;
     }
 
-    let row = document.createElement('tr');
-    row.innerHTML = `
-        <td>${nombre}</td>
-        <td>$${precio}</td>
-        <td>${puesto}</td>
-        <td class="text-center">
-            <button class="btn btn-sm btn-warning" onclick="editProducto(this)">Editar</button> 
-            <button class="btn btn-sm btn-danger" onclick="deleteProducto(this)">Eliminar</button>
-        </td>
-    `;
-    document.getElementById('productosList').appendChild(row);
-    document.getElementById('productoForm').reset();
+    let producto = {
+        nombre_producto: nombre,
+        precio: precio,
+        id_puesto: puesto
+    };
+
+    fetch('http://localhost:8080/api/producto', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(producto)
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert("Producto añadido correctamente");
+        loadProductos();
+        document.getElementById('productoForm').reset();
+    })
+    .catch(error => console.error('Error:', error));
 });
 
-function editProducto(button) {
-    let row = button.closest('tr');
-    document.getElementById('productoNombre').value = row.cells[0].textContent;
-    document.getElementById('productoPrecio').value = row.cells[1].textContent.replace('$', '');
-    document.getElementById('productoPuesto').value = row.cells[2].textContent;
-    row.remove();
+function editProducto(id_producto) {
+    fetch(`http://localhost:8080/api/producto/${id_producto}`)
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('productoNombre').value = data.nombre_producto;
+        document.getElementById('productoPrecio').value = data.precio;
+        document.getElementById('productoPuesto').value = data.id_puesto;
+
+        deleteProducto(id_producto); // Eliminar primero para editar
+    })
+    .catch(error => console.error('Error:', error));
 }
 
-function deleteProducto(button) {
+function deleteProducto(id_producto) {
     if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
-        button.closest('tr').remove();
+        fetch(`http://localhost:8080/api/producto/${id_producto}`, {
+            method: 'DELETE'
+        })
+        .then(() => {
+            alert("Producto eliminado correctamente");
+            loadProductos();
+        })
+        .catch(error => console.error('Error:', error));
     }
 }
+
 
 // Gestión de Puestos
 document.getElementById('puestoForm').addEventListener('submit', function(e) {
@@ -94,31 +181,69 @@ document.getElementById('puestoForm').addEventListener('submit', function(e) {
         return;
     }
 
-    let row = document.createElement('tr');
-    row.innerHTML = `
-        <td>${ubicacion}</td>
-        <td class="text-center">
-            <button class="btn btn-sm btn-warning" onclick="editPuesto(this)">Editar</button> 
-            <button class="btn btn-sm btn-danger" onclick="deletePuesto(this)">Eliminar</button>
-        </td>
-    `;
-    document.getElementById('puestosList').appendChild(row);
-    document.getElementById('puestoForm').reset();
+    let puesto = {
+        ubicacion: ubicacion
+    };
+
+    fetch('http://localhost:8080/api/puesto', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(puesto)
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert("Puesto añadido correctamente");
+        loadPuestos();
+        document.getElementById('puestoForm').reset();
+    })
+    .catch(error => console.error('Error:', error));
 });
 
-function editPuesto(button) {
-    let row = button.closest('tr');
-    document.getElementById('puestoUbicacion').value = row.cells[0].textContent;
-    row.remove();
+function loadPuestos() {
+    fetch('http://localhost:8080/api/puesto')
+    .then(response => response.json())
+    .then(data => {
+        let puestoList = document.getElementById('puestosList');
+        puestoList.innerHTML = ''; // Limpiar la lista
+
+        data.forEach(puesto => {
+            let row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${puesto.ubicacion}</td>
+                <td class="text-center">
+                    <button class="btn btn-sm btn-warning" onclick="editPuesto(${puesto.id_puesto})">Editar</button> 
+                    <button class="btn btn-sm btn-danger" onclick="deletePuesto(${puesto.id_puesto})">Eliminar</button>
+                </td>
+            `;
+            puestoList.appendChild(row);
+        });
+    })
+    .catch(error => console.error('Error:', error));
 }
 
-function deletePuesto(button) {
+function editPuesto(id_puesto) {
+    fetch(`http://localhost:8080/api/puesto/${id_puesto}`)
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('puestoUbicacion').value = data.ubicacion;
+        deletePuesto(id_puesto);
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function deletePuesto(id_puesto) {
     if (confirm("¿Estás seguro de que deseas eliminar este puesto?")) {
-        button.closest('tr').remove();
+        fetch(`http://localhost:8080/api/puesto/${id_puesto}`, {
+            method: 'DELETE'
+        })
+        .then(() => {
+            alert("Puesto eliminado correctamente");
+            loadPuestos();
+        })
+        .catch(error => console.error('Error:', error));
     }
 }
 
-// Función para mostrar la sección adecuada
 function showSection(sectionId) {
     document.getElementById('señoraSection').style.display = 'none';
     document.getElementById('productoSection').style.display = 'none';
