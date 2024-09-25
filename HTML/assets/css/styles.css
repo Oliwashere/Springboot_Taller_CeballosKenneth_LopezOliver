@@ -1,0 +1,58 @@
+body {     
+    background-image: url(/HTML/assets/media/img/fondo_menu.jpg);
+    background-color: #FFF3E0; /* Fondo cálido */
+    font-family: 'Quicksand', sans-serif;
+}
+
+.navbar {
+    background-color: #eea32f;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #fff !important;
+}
+
+.nav-link {
+    color: #fff !important;
+}
+
+.form-label {
+    color: #000000;
+}
+
+.btn-primary {
+    background-color: #FF6F00;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #E65100;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #FFE0B2;
+}
+
+.table-striped > tbody > tr:nth-of-type(even) {
+    background-color: #FFF3E0;
+}
+
+.table th, .table td {
+    color: #E65100;
+}
+
+/* Iconos personalizados */
+.fa-utensils, .fa-user-tie, .fa-store {
+    color: #ff5e00;
+    margin-right: 10px;
+}
+
+
+#señoraSection,
+#productoSection,
+#puestoSection{
+    border-radius: 15px;
+    background-image: url(/HTML/assets/media/img/fondo_menu.png); 
+}
+

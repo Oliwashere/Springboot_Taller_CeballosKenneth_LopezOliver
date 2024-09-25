@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Personas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 class="text-center">CRUD de Personas</h2>
+
+    <!-- Formulario de Personas -->
+    <form id="personForm" class="mt-4">
+        <div class="mb-3">
+            <label for="name" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="age" class="form-label">Edad</label>
+            <input type="number" class="form-control" id="age" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control" id="email" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Agregar Persona</button>
+        <input type="hidden" id="editIndex">
+    </form>
+
+    <!-- Tabla de Personas -->
+    <div class="mt-5">
+        <h4 class="text-center">Lista de Personas</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Edad</th>
+                    <th>Email</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="personList">
+                <!-- Aquí se agregarán las personas -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+// Obtener personas de localStorage
+function getPersons() {
+    let persons = localStorage.getItem('persons');
+    return persons ? JSON.parse(persons) : [];
+}
+
+// Guardar personas en localStorage
+function savePersons(persons) {
+    localStorage.setItem('persons', JSON.stringify(persons));
+}
+
+// Renderizar personas en la tabla
+function renderPersons() {
+    const persons = getPersons();
+    const personList = document.getElementById('personList');
+    personList.innerHTML = '';
+
+    persons.forEach((person, index) => {
+        const row = `
+            <tr>
+                <td>${person.name}</td>
+                <td>${person.age}</td>
+                <td>${person.email}</td>
+                <td>
+                    <button class="btn btn-sm btn-warning" onclick="editPerson(${index})">Editar</button>
+                    <button class="btn btn-sm btn-danger" onclick="deletePerson(${index})">Eliminar</button>
+                </td>
+            </tr>
+        `;
+        personList.innerHTML += row;
+    });
+}
+
+// Agregar persona
+function addPerson(person) {
+    const persons = getPersons();
+    persons.push(person);
+    savePersons(persons);
+    renderPersons();
+}
+
+// Editar persona
+function editPerson(index) {
+    const persons = getPersons();
+    const person = persons[index];
+
+    document.getElementById('name').value = person.name;
+    document.getElementById('age').value = person.age;
+    document.getElementById('email').value = person.email;
+    document.getElementById('editIndex').value = index;
+
+    document.querySelector('button[type="submit"]').textContent = 'Actualizar Persona';
+}
+
+// Actualizar persona
+function updatePerson(index, updatedPerson) {
+    const persons = getPersons();
+    persons[index] = updatedPerson;
+    savePersons(persons);
+    renderPersons();
+}
+
+// Eliminar persona
+function deletePerson(index) {
+    const persons = getPersons();
+    persons.splice(index, 1);
+    savePersons(persons);
+    renderPersons();
+}
+
+// Manejar el formulario
+document.getElementById('personForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const age = document.getElementById('age').value;
+    const email = document.getElementById('email').value;
+    const editIndex = document.getElementById('editIndex').value;
+
+    const newPerson = { name, age, email };
+
+    if (editIndex === '') {
+        // Agregar persona nueva
+        addPerson(newPerson);
+    } else {
+        // Actualizar persona existente
+        updatePerson(editIndex, newPerson);
+        document.querySelector('button[type="submit"]').textContent = 'Agregar Persona';
+        document.getElementById('editIndex').value = '';
+    }
+
+    // Limpiar formulario
+    document.getElementById('personForm').reset();
+});
+
+// Renderizar personas al cargar la página
+document.addEventListener('DOMContentLoaded', renderPersons);
+</script>
+
+</body>
+</html>
