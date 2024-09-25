@@ -56,3 +56,29 @@ body {
     background-image: url(/HTML/assets/media/img/fondo_menu.png); 
 }
 
+/* Estilo para redondear solo la parte superior del encabezado */
+thead th {
+    border-radius: 10px 10px 0 0; /* Redondea las esquinas superiores */
+    padding: 10px; /* Espaciado dentro de cada celda */
+    background-color: #f2f2f2; /* Color de fondo */
+    text-align: center; /* Centrar el texto */
+}
+
+/* Eliminar bordes en las celdas intermedias para unificar el diseño */
+thead th:not(:first-child) {
+    border-left: none; /* Elimina el borde entre celdas */
+}
+
+/**/
+/* Estilo para el título principal */
+h2.text-center {
+    padding: 2%;
+    font-size: 50px; /* Aumenta el tamaño del texto */
+    font-weight: bold; /* Hace el texto más grueso */
+}
+
+/* Estilo para el subtítulo "Registrar Señora" */
+h3 {
+    font-size: 28px; /* Aumenta el tamaño del subtítulo */
+    font-weight: 600; /* Peso del texto (ligeramente más grueso) */
+}
