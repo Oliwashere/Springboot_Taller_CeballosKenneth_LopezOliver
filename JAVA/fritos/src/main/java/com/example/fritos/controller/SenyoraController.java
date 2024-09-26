@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/puesto")
+@RequestMapping("/api/senyora")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class SenyoraController {
 
@@ -17,25 +17,23 @@ public class SenyoraController {
 
     @GetMapping
     @CrossOrigin(origins = "http://127.0.0.1:5500")
-    public List<Senyora> getAllPuestos() {
+    public List<Senyora> getAllSenyoras() {
         return senyoraService.getAllSenyoras();
     }
 
     @PostMapping
     @CrossOrigin(origins = "http://127.0.0.1:5500")
-    public Senyora createPuesto(@RequestBody Senyora senyora) {
+    public Senyora createSenyora(@RequestBody Senyora senyora) {
         return senyoraService.saveSenyora(senyora);
     }
 
     @PutMapping("/{id}")
-    @CrossOrigin(origins = "http://127.0.0.1:5500")
-    public Senyora updatePuesto(@PathVariable Long id_senyora, @RequestBody Senyora senyora) {
-        return senyoraService.updateSenyora(id_senyora, senyora);
+    public Senyora updateSenyora(@PathVariable("id") Long id, @RequestBody Senyora senyora) {
+        return senyoraService.updateSenyora(id, senyora);
     }
 
     @DeleteMapping("/{id}")
-    @CrossOrigin(origins = "http://127.0.0.1:5500")
-    public void deletePuesto(@PathVariable Long id_senyora) {
-        senyoraService.deleteSenyora(id_senyora);
+    public void deleteSenyora(@PathVariable("id") Long id) {
+        senyoraService.deleteSenyora(id);
     }
 }

@@ -10,7 +10,7 @@ public class Puesto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_puesto;
+    private Long id;
 
     private String ubicacion;
 
@@ -22,11 +22,11 @@ public class Puesto {
     }
 
     public Long getId() {
-        return id_puesto;
+        return id;
     }
 
-    public void setId(Long id_puesto) {
-        this.id_puesto = id_puesto;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUbicacion() {

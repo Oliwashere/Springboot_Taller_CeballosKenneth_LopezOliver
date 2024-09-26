@@ -18,20 +18,16 @@ public class ProductoService {
         return productoRepository.findAll();
     }
 
-    public Optional<Producto> getProductoById(Long id_producto) {
-        return productoRepository.findById(id_producto);
-    }
-
     public Producto saveProducto(Producto producto) {
         return productoRepository.save(producto);
     }
 
-    public void deleteProducto(Long id_producto) {
-        productoRepository.deleteById(id_producto);
+    public void deleteProducto(Long id) {
+        productoRepository.deleteById(id);
     }
 
-    public Producto updateProducto(Long id_producto, Producto productoDetails) {
-        Producto producto = productoRepository.findById(id_producto).orElseThrow();
+    public Producto updateProducto(Long id, Producto productoDetails) {
+        Producto producto = productoRepository.findById(id).orElseThrow();
         producto.setNombre_producto(productoDetails.getNombre_producto());
         producto.setPrecio(productoDetails.getPrecio());
         producto.setId_puesto(productoDetails.getId_puesto());

@@ -21,15 +21,16 @@ public class SenyoraService {
         return senyoraRepository.save(senyora);
     }
 
-    public void deleteSenyora(Long id_senyora) {
-        senyoraRepository.deleteById(id_senyora);
+    public void deleteSenyora(Long id) {
+        senyoraRepository.deleteById(id);
     }
 
-    public Senyora updateSenyora(Long id_senyora, Senyora senyoraDetails) {
-        Senyora senyora = senyoraRepository.findById(id_senyora).orElseThrow();
+    public Senyora updateSenyora(Long id, Senyora senyoraDetails) {
+        Senyora senyora = senyoraRepository.findById(id).orElseThrow();
         senyora.setNombre(senyoraDetails.getNombre());
         senyora.setCedula(senyoraDetails.getCedula());
         senyora.setCelular(senyoraDetails.getCelular());
+        senyora.setId_puesto(senyoraDetails.getId_puesto());
         return senyoraRepository.save(senyora);
     }
 }

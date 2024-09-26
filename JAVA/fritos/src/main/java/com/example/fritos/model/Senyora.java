@@ -10,27 +10,29 @@ public class Senyora {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_senyora;
+    private Long id;
 
     private String nombre;
     private String cedula;
     private String celular;
+    private int id_puesto;
 
     public Senyora() {
     }
 
-    public Senyora(String nombre, String cedula, String celular) {
+    public Senyora(String nombre, String cedula, String celular, int id_puesto) {
         this.nombre = nombre;
         this.cedula = cedula;
         this.celular = celular;
+        this.id_puesto = id_puesto;
     }
 
     public Long getId() {
-        return id_senyora;
+        return id;
     }
 
-    public void setId(Long id_senyora) {
-        this.id_senyora = id_senyora;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -55,5 +57,13 @@ public class Senyora {
 
     public void setCelular(String celular) {
         this.celular = celular;
+    }
+
+    public int getId_puesto() {
+        return id_puesto;
+    }
+
+    public void setId_puesto(int id_puesto) {
+        this.id_puesto = id_puesto;
     }
 }

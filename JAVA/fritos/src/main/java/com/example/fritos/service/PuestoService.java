@@ -22,12 +22,12 @@ public class PuestoService {
         return puestoRepository.save(puesto);
     }
 
-    public void deletePuesto(Long id_puesto) {
-        puestoRepository.deleteById(id_puesto);
+    public void deletePuesto(Long id) {
+        puestoRepository.deleteById(id);
     }
 
-    public Puesto updatePuesto(Long id_puesto, Puesto puestoDetails) {
-        Puesto puesto = puestoRepository.findById(id_puesto).orElseThrow();
+    public Puesto updatePuesto(Long id, Puesto puestoDetails) {
+        Puesto puesto = puestoRepository.findById(id).orElseThrow();
         puesto.setUbicacion(puestoDetails.getUbicacion());
         return puestoRepository.save(puesto);
     }
